@@ -12,8 +12,7 @@ A from-scratch character-level GPT trained on plain text, built with PyTorch.
 ## Setup
 
 ```bash
-python -m venv .venv && source .venv/bin/activate
-pip install torch
+uv sync
 ```
 
 Place your training corpus as `pg3200.txt` in the project root.
@@ -21,7 +20,7 @@ Place your training corpus as `pg3200.txt` in the project root.
 ## Training
 
 ```bash
-python main.py
+uv run main.py
 ```
 
 - Logs step loss every 100 steps and train/val loss every 500 steps to stdout and `training.log`
@@ -34,7 +33,7 @@ Tune hyperparameters in [config.py](config.py).
 ## Inference
 
 ```bash
-python test.py
+uv run test.py
 ```
 
 Loads the latest checkpoint and enters an interactive loop:
