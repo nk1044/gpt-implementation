@@ -2,8 +2,9 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 
-from config import N_EMBEDDINGS, CONTEXT_WINDOW
+from config import N_EMBEDDINGS, CONTEXT_WINDOW, FFN_FACTOR, NUM_HEADS, NUM_LAYERS
 from tokenizer import VOCAB_SIZE
+from transformer_block import Block
 
 
 class LanguageModel(nn.Module):
@@ -11,6 +12,8 @@ class LanguageModel(nn.Module):
         super().__init__()
         self.token_embedding = nn.Embedding(VOCAB_SIZE, N_EMBEDDINGS)
         self.pos_embedding = nn.Embedding(CONTEXT_WINDOW, N_EMBEDDINGS)
+        self.blocks = nn.Sequential(*[Block(N_EMBEDDINGS, NUM_HEADS, FFN_FACTOR) for _ in range(NUM_LAYERS)])
+        self.final_layer_norm = nn.LayerNorm(N_EMBEDDINGS)
         self.lm_head = nn.Linear(N_EMBEDDINGS, VOCAB_SIZE)
 
     def forward(self, x, target=None):
@@ -18,6 +21,8 @@ class LanguageModel(nn.Module):
         tok_embd = self.token_embedding(x) # (B, T) -> (B, T, C)
         pos_embd = self.pos_embedding(torch.arange(T)) # (T, C)
         x = tok_embd+pos_embd
+        x = self.blocks(x)
+        x = self.final_layer_norm(x)
         logits = self.lm_head(x) # (B, T, C) -> (B, T, vocab_size)
 
         if target is None:
@@ -39,6 +44,3 @@ class LanguageModel(nn.Module):
             x_next = torch.multinomial(prob, num_samples=1) # (B, 1)
             x = torch.cat((x, x_next), dim=-1) # (B, T+1)
         return x
-
-
-

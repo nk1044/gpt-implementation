@@ -1,15 +1,14 @@
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
-from config import N_EMBEDDINGS
 
 class Head(nn.Module):
-    def __init__(self, head_size):
+    def __init__(self, num_embd, head_size):
         super().__init__()
-        self.query = nn.Linear(N_EMBEDDINGS, head_size, bias=False)
-        self.key = nn.Linear(N_EMBEDDINGS, head_size, bias=False)
-        self.value = nn.Linear(N_EMBEDDINGS, head_size, bias=False)
-        self.register_buffer('tril', torch.tril(torch.ones(N_EMBEDDINGS, N_EMBEDDINGS)))
+        self.query = nn.Linear(num_embd, head_size, bias=False)
+        self.key = nn.Linear(num_embd, head_size, bias=False)
+        self.value = nn.Linear(num_embd, head_size, bias=False)
+        self.register_buffer('tril', torch.tril(torch.ones(num_embd, num_embd)))
      
     def forward(self, x):
         B, T, C = x.shape
@@ -24,10 +23,10 @@ class Head(nn.Module):
         return out
 
 class MultiHeadAttention(nn.Module):
-    def __init__(self, num_heads, head_size):
+    def __init__(self, num_embd, num_heads, head_size):
         super().__init__()
-        self.heads = nn.ModuleList([Head(head_size) for _ in range(num_heads)])
-        self.proj = nn.Linear(N_EMBEDDINGS, N_EMBEDDINGS)
+        self.heads = nn.ModuleList([Head(num_embd, head_size) for _ in range(num_heads)])
+        self.proj = nn.Linear(num_embd, num_embd)
 
     def forward(self, x):
         out = torch.cat([h(x) for h in self.heads], dim=-1)
