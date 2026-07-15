@@ -1,0 +1,21 @@
+import torch
+
+with open('pg3200.txt', 'r', encoding='utf-8') as file:
+    data = file.read()
+
+print("Length of the code:", len(data))
+chars = sorted(list(set(data)))
+print("Number of unique characters:", len(chars))
+print("Unique characters:", "".join(chars))
+
+stoi = { ch:i for i,ch in enumerate(chars) }
+itos = { i:ch for i,ch in enumerate(chars) }
+
+encode = lambda s: [stoi[c] for c in s] # encoder: take a string, output a list of integers
+decode = lambda l: ''.join([itos[i] for i in l]) # decoder: take a list of integers, output a string
+
+print(encode("hii there"))
+print(decode(encode("hii there")))
+
+data = torch.tensor(encode(data), dtype=torch.long)
+print(data.shape, data.dtype)
