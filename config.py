@@ -9,7 +9,7 @@ FFN_FACTOR = 4
 NUM_HEADS = 8
 
 # Training
-N_TRAIN = 10000
+N_TRAIN = 5000
 LEARNING_RATE = 3e-4     # standard AdamW learning rate
 DROPOUTS = 0.2           # regularization
 

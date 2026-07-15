@@ -1,6 +1,6 @@
 import torch
 
-with open('pg3200.txt', 'r', encoding='utf-8') as file:
+with open('pg100.txt', 'r', encoding='utf-8') as file:
     data = file.read()
 
 chars = sorted(list(set(data)))

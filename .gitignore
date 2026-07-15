@@ -93,6 +93,8 @@ hf_cache/
 
 # UV
 
+*.txt
+
 .uv/
 uv_cache/
 *.python-version

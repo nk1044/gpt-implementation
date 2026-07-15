@@ -1,5 +1,7 @@
 import os
+import sys
 import torch
+import torch.nn.functional as F
 
 from model import LanguageModel
 from tokenizer import decode
@@ -54,14 +56,19 @@ def main():
             print("Exiting.")
             break
 
-        context = torch.zeros((1, 1), dtype=torch.long, device=DEVICE)
-        with torch.no_grad():
-            generated = model.generate(context, max_new_tokens=max_tokens)
-
-        output = decode(generated[0].tolist())
         print("\n--- Generated Text ---")
-        print(output)
-        print(f"--- End ({len(output)} chars, {max_tokens} tokens) ---\n")
+        x = torch.zeros((1, 1), dtype=torch.long, device=DEVICE)
+        with torch.no_grad():
+            for _ in range(max_tokens):
+                x_cond = x[:, -CONTEXT_WINDOW:]
+                logits, _ = model(x_cond)
+                logits = logits[:, -1, :]
+                prob = F.softmax(logits, dim=-1)
+                x_next = torch.multinomial(prob, num_samples=1)
+                x = torch.cat((x, x_next), dim=-1)
+                sys.stdout.write(decode([x_next.item()]))
+                sys.stdout.flush()
+        print(f"\n--- End ({max_tokens} tokens) ---\n")
 
 
 if __name__ == "__main__":
