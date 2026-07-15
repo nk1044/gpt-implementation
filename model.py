@@ -2,17 +2,23 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 
-from config import N_EMBEDDINGS, CONTEXT_WINDOW
+from config import N_EMBEDDINGS, CONTEXT_WINDOW, BATCH_SIZE
 from tokenizer import VOCAB_SIZE
 
 
 class LanguageModel(nn.Module):
     def __init__(self):
         super().__init__()
-        self.token_embedding = nn.Embedding(VOCAB_SIZE, VOCAB_SIZE)
+        self.token_embedding = nn.Embedding(VOCAB_SIZE, N_EMBEDDINGS)
+        self.pos_embedding = nn.Embedding(CONTEXT_WINDOW, N_EMBEDDINGS)
+        self.lm_head = nn.Linear(N_EMBEDDINGS, VOCAB_SIZE)
 
     def forward(self, x, target=None):
-        logits = self.token_embedding(x)
+        B, T = x.shape
+        tok_embd = self.token_embedding(x) # (B, T) -> (B, T, C)
+        pos_embd = self.pos_embedding(torch.arange(T)) # (T, C)
+        x = tok_embd+pos_embd
+        logits = self.lm_head(x) # (B, T, C) -> (B, T, vocab_size)
 
         if target is None:
             loss = None
