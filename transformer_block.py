@@ -1,5 +1,4 @@
 import torch.nn as nn
-from torch.nn import functional as F
 from attention_head import MultiHeadAttention
 from config import DROPOUTS
 
@@ -15,7 +14,7 @@ class FeedForward(nn.Module):
         )
     def forward(self, x):
         return self.net(x)
-    
+
 
 
 class Block(nn.Module):
@@ -26,10 +25,8 @@ class Block(nn.Module):
         self.feed_forward_layer = FeedForward(num_embd, ffn_factor)
         self.layer_norm1 = nn.LayerNorm(num_embd)
         self.layer_norm2 = nn.LayerNorm(num_embd)
-    
+
     def forward(self, x):
-        x = self.layer_norm1(x)
-        x = self.self_attention_layer(x)
-        x = self.layer_norm1(x)
-        x = self.feed_forward_layer(x)
+        x = x + self.self_attention_layer(self.layer_norm1(x))
+        x = x + self.feed_forward_layer(self.layer_norm2(x))
         return x
