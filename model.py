@@ -19,7 +19,7 @@ class LanguageModel(nn.Module):
     def forward(self, x, target=None):
         B, T = x.shape
         tok_embd = self.token_embedding(x) # (B, T) -> (B, T, C)
-        pos_embd = self.pos_embedding(torch.arange(T)) # (T, C)
+        pos_embd = self.pos_embedding(torch.arange(T, device=x.device)) # (T, C)
         x = tok_embd+pos_embd
         x = self.blocks(x)
         x = self.final_layer_norm(x)

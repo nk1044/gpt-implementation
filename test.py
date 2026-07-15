@@ -3,12 +3,12 @@ import torch
 
 from model import LanguageModel
 from tokenizer import decode
-from config import CHECKPOINT_DIR, CONTEXT_WINDOW
+from config import CHECKPOINT_DIR, CONTEXT_WINDOW, DEVICE
 
 
 def load_model(checkpoint_path: str) -> LanguageModel:
-    checkpoint = torch.load(checkpoint_path, map_location="cpu")
-    model = LanguageModel()
+    checkpoint = torch.load(checkpoint_path, map_location=DEVICE)
+    model = LanguageModel().to(DEVICE)
     model.load_state_dict(checkpoint["model_state_dict"])
     model.eval()
     return model
@@ -54,7 +54,7 @@ def main():
             print("Exiting.")
             break
 
-        context = torch.zeros((1, 1), dtype=torch.long)
+        context = torch.zeros((1, 1), dtype=torch.long, device=DEVICE)
         with torch.no_grad():
             generated = model.generate(context, max_new_tokens=max_tokens)
 

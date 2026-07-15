@@ -40,7 +40,7 @@ def estimate_loss(model):
 
 os.makedirs(CHECKPOINT_DIR, exist_ok=True)
 
-model = LanguageModel()
+model = LanguageModel().to(DEVICE)
 n_params = sum(p.numel() for p in model.parameters()) / 1e6
 logger.info(f"Model initialized: {n_params:.2f}M parameters")
 logger.info(f"Device: {DEVICE}")
