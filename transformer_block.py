@@ -1,6 +1,7 @@
 import torch.nn as nn
 from torch.nn import functional as F
 from attention_head import MultiHeadAttention
+from config import DROPOUTS
 
 
 class FeedForward(nn.Module):
@@ -9,7 +10,8 @@ class FeedForward(nn.Module):
         self.net = nn.Sequential(
             nn.Linear(num_embd, num_embd*ffn_factor),
             nn.ReLU(),
-            nn.Linear(num_embd*ffn_factor, num_embd)
+            nn.Linear(num_embd*ffn_factor, num_embd),
+            nn.Dropout(DROPOUTS)
         )
     def forward(self, x):
         return self.net(x)
