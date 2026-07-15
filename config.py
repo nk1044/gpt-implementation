@@ -1,0 +1,8 @@
+
+
+CONTEXT_WINDOW=64 # (T)
+BATCH_SIZE=8 # (B)
+N_EMBEDDINGS=64 # (C)
+
+
+
