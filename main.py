@@ -2,12 +2,12 @@ import torch
 from model import LanguageModel
 from data import get_batch
 from tokenizer import decode
-from config import N_TRAIN
+from config import N_TRAIN, LEARNING_RATE
 
 model = LanguageModel()
 print(f"{sum(p.numel() for p in model.parameters())/1e6:.2f}M Parameters")
 
-optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3)
+optimizer = torch.optim.AdamW(model.parameters(), lr=LEARNING_RATE)
 
 for _ in range(N_TRAIN):
     x, y = get_batch("train")

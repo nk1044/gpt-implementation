@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 
-from config import N_EMBEDDINGS, CONTEXT_WINDOW, BATCH_SIZE
+from config import N_EMBEDDINGS, CONTEXT_WINDOW
 from tokenizer import VOCAB_SIZE
 
 
