@@ -1,0 +1,104 @@
+# Virtual environments
+
+.venv/
+venv/
+env/
+
+# Python
+
+**pycache**/
+*.py[cod]
+*$py.class
+
+# Build / distribution
+
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Testing / coverage
+
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Type checkers
+
+.mypy_cache/
+.pyre/
+.pytype/
+.ruff_cache/
+
+# Jupyter
+
+.ipynb_checkpoints/
+
+# IDEs
+
+.vscode/
+.idea/
+
+# OS files
+
+.DS_Store
+Thumbs.db
+
+# Logs
+
+*.log
+logs/
+
+# Environment variables / secrets
+
+.env
+.env.*
+!.env.example
+
+# Model artifacts
+
+checkpoints/
+models/
+weights/
+*.ckpt
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.onnx
+
+# Training outputs
+
+outputs/
+runs/
+wandb/
+mlruns/
+lightning_logs/
+tensorboard/
+tb_logs/
+
+# Datasets (keep if downloaded/generated locally)
+
+data/
+datasets/
+cache/
+
+# Hugging Face
+
+.huggingface/
+hf_cache/
+
+# UV
+
+.uv/
+uv_cache/
+*.python-version
+
+# Misc
+
+tmp/
+temp/
+*.tmp
